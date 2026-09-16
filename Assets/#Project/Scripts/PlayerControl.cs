@@ -13,6 +13,8 @@ public class PlayerControl : MonoBehaviour
     private InputAction xAxis;
     private InputAction jump;
 
+    private bool isGrounded;
+
     [SerializeField] private Transform ground;
 
     public float force = 1f;
@@ -21,6 +23,7 @@ public class PlayerControl : MonoBehaviour
     {
         xAxis = actions.FindActionMap("CubeActionsMap").FindAction("XAxis");
         jump = actions.FindActionMap("CubeActionsMap").FindAction("Jump");
+        isGrounded = true;
     }
 
     void OnEnable()
@@ -48,10 +51,18 @@ public class PlayerControl : MonoBehaviour
 
     }
 
+    
+
     private void Jump()
     {
         float yJump = jump.ReadValue<float>();
-        transform.position += force * Time.deltaTime * yJump * Vector3.up;
+        if (isGrounded) 
+        {
+            transform.position += force * Time.deltaTime * yJump * Vector3.up;
+            
+        }
+
+        isGrounded = !isGrounded;
         
-    }
+    }   
 }
