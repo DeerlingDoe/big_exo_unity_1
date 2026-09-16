@@ -11,15 +11,22 @@ public class PlayerControl : MonoBehaviour
     public InputActionAsset actions;
     public float speed = 1f;
     private InputAction xAxis;
+    private InputAction jump;
+
+    [SerializeField] private Transform ground;
+
+    public float force = 1f;
 
     void Awake()
     {
         xAxis = actions.FindActionMap("CubeActionsMap").FindAction("XAxis");
+        jump = actions.FindActionMap("CubeActionsMap").FindAction("Jump");
     }
 
     void OnEnable()
     {
         actions.FindActionMap("CubeActionsMap").Enable();
+        
     }
 
     void OnDisable()
@@ -30,6 +37,8 @@ public class PlayerControl : MonoBehaviour
     void Update()
     {
         MoveX();
+        Jump();
+        transform.position += speed * Time.deltaTime * Vector3.forward;
     }
 
     private void MoveX()
@@ -37,5 +46,12 @@ public class PlayerControl : MonoBehaviour
         float xMove = xAxis.ReadValue<float>();
         transform.position += speed * Time.deltaTime * xMove * transform.right;
 
+    }
+
+    private void Jump()
+    {
+        float yJump = jump.ReadValue<float>();
+        transform.position += force * Time.deltaTime * yJump * Vector3.up;
+        
     }
 }
